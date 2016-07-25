@@ -36,5 +36,5 @@ var trip   = new Trip("Spring Break", "Toledo", "Brooklyn", states);
 
 ReactDOM.render(
   <TripComponent trip={trip} />,
-  document.getElementById('state-list')
+  document.getElementById('trip-container')
 );
