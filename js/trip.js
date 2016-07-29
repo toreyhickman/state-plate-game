@@ -4,3 +4,7 @@ var Trip = function(name, origin, destination, states) {
   this.destination = destination;
   this.states = states;
 }
+
+Trip.prototype.tripDetails = function() {
+  return { name: this.name, origin: this.origin, destination: this.destination }
+}
