@@ -16,7 +16,11 @@ var TripDetails = React.createClass({
 var StatesList = React.createClass({
   stateListItems: function() {
     return this.props.states.map(function(state) {
-      return(<li key={state.name.toLowerCase()}>{state.name}</li>)
+      if (state.seen) {
+        return(<SeenStateItem key={state.name.toLowerCase()} state={state} />)
+      } else {
+        return(<UnseenStateItem key={state.name.toLowerCase()} state={state} />)
+      }
     });
   },
 
@@ -28,6 +32,24 @@ var StatesList = React.createClass({
         </ul>
       </section>
     );
+  }
+});
+
+var UnseenStateItem = React.createClass({
+  render: function() {
+    return(
+      <li>{this.props.state.name}</li>
+    )
+  }
+});
+
+var SeenStateItem = React.createClass({
+  render: function() {
+    return(
+      <li>
+        {this.props.state.name}: has been seen!!
+      </li>
+    )
   }
 });
 
@@ -45,6 +67,7 @@ var TripComponent = React.createClass({
 
 // Initializing the application
 var states = USStateListCreator();
+states[1].seen = true
 var trip   = new Trip("Spring Break", "Toledo", "Brooklyn", states);
 
 ReactDOM.render(
