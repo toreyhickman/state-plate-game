@@ -19,9 +19,9 @@ var StatesList = React.createClass({
       if (state.seen) {
         return(<SeenStateItem key={state.name.toLowerCase()} state={state} />)
       } else {
-        return(<UnseenStateItem key={state.name.toLowerCase()} state={state} />)
+        return(<UnseenStateItem key={state.name.toLowerCase()} state={state} onStateItemClick={this.props.onStateItemClick} />)
       }
-    });
+    }, this);
   },
 
   render: function() {
@@ -36,9 +36,14 @@ var StatesList = React.createClass({
 });
 
 var UnseenStateItem = React.createClass({
+  markStateSeen: function() {
+    this.props.state.seen = true;
+    this.props.onStateItemClick();
+  },
+
   render: function() {
     return(
-      <li>{this.props.state.name}</li>
+      <li onClick={this.markStateSeen}>{this.props.state.name}</li>
     )
   }
 });
@@ -54,11 +59,24 @@ var SeenStateItem = React.createClass({
 });
 
 var TripComponent = React.createClass({
+  getInitialState: function() {
+    var states = USStateListCreator();
+    var trip   = new Trip("Spring Break", "Toledo", "Brooklyn", states);
+
+    return {
+      trip: trip
+    }
+  },
+
+  reassignTrip: function(){
+    this.setState({trip: this.state.trip});
+  },
+
   render: function() {
     return(
       <div>
-        <TripDetails details={this.props.trip.tripDetails()} />
-        <StatesList  states={this.props.trip.states} />
+        <TripDetails details={this.state.trip.tripDetails()} />
+        <StatesList  states={this.state.trip.states} onStateItemClick={this.reassignTrip} />
       </div>
     );
   }
@@ -66,11 +84,7 @@ var TripComponent = React.createClass({
 
 
 // Initializing the application
-var states = USStateListCreator();
-states[1].seen = true
-var trip   = new Trip("Spring Break", "Toledo", "Brooklyn", states);
-
 ReactDOM.render(
-  <TripComponent trip={trip} />,
+  <TripComponent />,
   document.getElementById('trip-container')
 );
